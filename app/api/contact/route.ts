@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
   try {
     const { name, email, message } = await request.json();
 
-    // Validate input
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: "Name, email, and message are required" },
@@ -15,11 +14,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email using Resend
     const { data, error } = await resend.emails.send({
-      // NOTE: Using onboarding@resend.dev means you can ONLY send emails to yourself
       from: "Portfolio Contact <onboarding@resend.dev>",
-      to: process.env.CONTACT_EMAIL || "narinderd9@gmail.com", // Updated here
+      to: process.env.CONTACT_EMAIL || "narinderd9@gmail.com",
       replyTo: email,
       subject: `New Contact Form Message from ${name}`,
       html: `
