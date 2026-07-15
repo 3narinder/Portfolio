@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { ABOUT_ME } from "@/lib/constants";
+import { about } from "@/data/content";
 
-const skills = ABOUT_ME.skills;
+const skills = about.skills;
 
 export function About() {
   const ref = useRef(null);
@@ -36,13 +36,13 @@ export function About() {
             className="md:col-span-2 space-y-4"
           >
             <p className="text-muted-foreground leading-relaxed">
-              {ABOUT_ME.description}
+              {about.description}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              {ABOUT_ME.journey}
+              {about.journey}
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              {ABOUT_ME.fastForward}{" "}
+              {about.fastForward}{" "}
             </p>
 
             <div className="pt-4">

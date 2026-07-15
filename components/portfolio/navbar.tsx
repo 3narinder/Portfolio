@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { personal } from "@/data/content";
 
 const navLinks = [
   { name: "About", href: "#about" },
@@ -42,7 +43,7 @@ export function Navbar() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          {"<AC />"}
+          {personal.name.split(' ').map(n => n[0]).join('')}
         </motion.a>
 
         {/* Desktop Navigation */}

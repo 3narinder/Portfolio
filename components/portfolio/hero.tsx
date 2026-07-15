@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
-import { BIO, SocialLinks } from "@/lib/constants";
+import { personal, social } from "@/data/content";
 
 export function Hero() {
   return (
@@ -14,7 +14,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-primary font-mono text-sm md:text-base mb-4"
         >
-          Hi, {BIO.name} here. I&apos;m a {BIO.role}.
+          Hi, {personal.name} here. I&apos;m a {personal.role}.
         </motion.p>
 
         <motion.h1
@@ -23,7 +23,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-4"
         >
-          {BIO.name}.
+          {personal.name}.
         </motion.h1>
 
         <motion.h2
@@ -32,7 +32,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="text-3xl md:text-5xl lg:text-6xl font-bold text-muted-foreground mb-8 text-balance"
         >
-          {BIO.description}
+          {personal.description}
         </motion.h2>
 
         <motion.p
@@ -41,7 +41,7 @@ export function Hero() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="text-muted-foreground text-lg md:text-xl max-w-xl mb-12 leading-relaxed"
         >
-          {BIO.roleDescription}
+          {personal.roleDescription}
         </motion.p>
 
         <motion.div
@@ -59,7 +59,7 @@ export function Hero() {
 
           <div className="flex items-center gap-4">
             <motion.a
-              href={SocialLinks.github}
+              href={social.github}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1, y: -2 }}
@@ -70,7 +70,7 @@ export function Hero() {
               <Github size={24} />
             </motion.a>
             <motion.a
-              href={SocialLinks.linkedin}
+              href={social.linkedin}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1, y: -2 }}
@@ -81,7 +81,7 @@ export function Hero() {
               <Linkedin size={24} />
             </motion.a>
             <motion.a
-              href={SocialLinks.email}
+              href={social.email}
               whileHover={{ scale: 1.1, y: -2 }}
               whileTap={{ scale: 0.95 }}
               className="text-muted-foreground hover:text-primary transition-colors duration-300"

@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Github, Linkedin } from "lucide-react";
+import { social, personal } from "@/data/content";
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com/3narinder", icon: Github },
+  { name: "GitHub", href: social.github, icon: Github },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/narinder-kumar-3216a9153/",
+    href: social.linkedin,
     icon: Linkedin,
   },
 ];
@@ -40,12 +41,12 @@ export function Footer() {
           className="text-center"
         >
           <a
-            href="https://github.com/3narinder"
+            href={social.github}
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground text-sm font-mono hover:text-primary transition-colors duration-300"
           >
-            <p>Designed & Built by Narinder Kumar</p>
+            <p>Designed & Built by {personal.name}</p>
           </a>
         </motion.div>
       </div>

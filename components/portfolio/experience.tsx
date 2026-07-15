@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { EXPERIENCES as experiences } from "@/lib/constants";
+import { experiences } from "@/data/content";
 
 export function Experience() {
   const ref = useRef(null);

@@ -2,12 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { social, contact } from "@/data/content";
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com/3narinder", icon: Github },
+  { name: "GitHub", href: social.github, icon: Github },
   {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/narinder-kumar-3216a9153/",
+    href: social.linkedin,
     icon: Linkedin,
   },
 ];
@@ -50,7 +51,7 @@ export function SocialSidebar() {
         className="hidden md:flex fixed right-8 bottom-0 flex-col items-center gap-6"
       >
         <motion.a
-          href="mailto:alex@example.com"
+          href={`mailto:${contact.email}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.2 }}
@@ -58,7 +59,7 @@ export function SocialSidebar() {
           className="text-muted-foreground hover:text-primary transition-colors duration-300 font-mono text-sm tracking-widest"
           style={{ writingMode: "vertical-rl" }}
         >
-          narinderd9@gmail.com
+          {contact.email}
         </motion.a>
         <div className="w-px h-24 bg-muted-foreground" />
       </motion.div>

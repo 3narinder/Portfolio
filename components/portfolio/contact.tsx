@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Mail, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { personal, contact } from "@/data/content";
 
 export function Contact() {
   const ref = useRef(null);
@@ -38,7 +39,6 @@ export function Contact() {
       setStatus("success");
       setFormState({ name: "", email: "", message: "" });
 
-      // Reset success status after 5 seconds
       setTimeout(() => setStatus("idle"), 5000);
     } catch (error) {
       setStatus("error");
@@ -49,7 +49,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="py-24 px-6">
+    <section id="contact" className="px-6">
       <div className="max-w-2xl mx-auto" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -134,7 +134,7 @@ export function Contact() {
               required
               rows={6}
               className="w-full px-4 py-3 bg-card border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 resize-none"
-              placeholder="Hi Narinder, I'd love to discuss a project with you..." // Updated here
+              placeholder={`Hi ${personal.name.split(" ")[0]}, I'd love to discuss a project with you...`}
             />
           </div>
 
@@ -184,7 +184,7 @@ export function Contact() {
             <span className="text-muted-foreground text-sm">or</span>
 
             <a
-              href="mailto:narinderd9@gmail.com" // Updated here
+              href={`mailto:${contact.email}`}
               className="inline-flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary rounded-md font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 w-full sm:w-auto justify-center"
             >
               <Mail size={20} />
