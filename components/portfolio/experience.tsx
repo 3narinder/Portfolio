@@ -14,7 +14,7 @@ export function Experience() {
           id="experience-title"
           index="03"
           eyebrow="Experience"
-          title="Where I've shipped."
+          title="Where I have worked"
           lede="Product teams and agencies where I built, reviewed, and maintained production React and Node code."
         />
 
@@ -29,11 +29,14 @@ export function Experience() {
                   <p className="font-mono text-xs tabular-nums tracking-[0.08em] text-muted-foreground">
                     {exp.period}
                   </p>
-                  <h3 className="text-[length:var(--step-2)] font-semibold leading-tight">
+                  <h3 className="text-(length:--step-2) font-semibold leading-tight">
                     {exp.company}
                   </h3>
                   <p className="text-primary">{exp.role}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2" aria-label="Technologies">
+                  <ul
+                    className="mt-4 flex flex-wrap gap-2"
+                    aria-label="Technologies"
+                  >
                     {exp.technologies.map((tech) => (
                       <li key={tech} className="chip">
                         {tech}
@@ -44,7 +47,10 @@ export function Experience() {
                 <ul className="flex flex-col gap-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
                   {exp.description.map((item) => (
                     <li key={item} className="flex gap-3">
-                      <span className="mt-2.5 h-px w-3 shrink-0 bg-primary" aria-hidden />
+                      <span
+                        className="mt-2.5 h-px w-3 shrink-0 bg-primary"
+                        aria-hidden
+                      />
                       {item}
                     </li>
                   ))}

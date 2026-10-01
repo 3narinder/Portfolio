@@ -66,7 +66,8 @@ export const portfolioContent = {
     name: "Narinder Kumar",
     role: "Full-Stack Developer",
     description: "I build things for the web.",
-    headline: "I build fast, accessible web products — from polished React interfaces to the Node APIs behind them.",
+    headline:
+      "I build fast, accessible web products — from polished React interfaces to the Node APIs behind them.",
     availability: "Available for new opportunities",
     roleDescription:
       "I'm a full-stack developer specializing in the MERN stack. Currently focused on building accessible, performant web applications that solve real-world problems.",
@@ -109,12 +110,27 @@ export const portfolioContent = {
       {
         title: "Frontend",
         description: "Interfaces that feel fast and stay accessible.",
-        skills: ["React", "Next.js", "TypeScript", "JavaScript", "Redux", "TanStack Query", "Tailwind CSS"],
+        skills: [
+          "React",
+          "Next.js",
+          "TypeScript",
+          "JavaScript",
+          "Redux",
+          "TanStack Query",
+          "Tailwind CSS",
+        ],
       },
       {
         title: "Backend",
         description: "Typed, validated APIs with clean data models.",
-        skills: ["Node.js", "Express.js", "MongoDB", "Mongoose", "GraphQL", "REST APIs"],
+        skills: [
+          "Node.js",
+          "Express.js",
+          "MongoDB",
+          "Mongoose",
+          "GraphQL",
+          "REST APIs",
+        ],
       },
       {
         title: "Quality & Delivery",
@@ -313,7 +329,6 @@ export const portfolioContent = {
       },
     },
   ] as Project[],
-
 
   // ============================================
   // OTHER PROJECTS (OPTIONAL)

@@ -22,7 +22,13 @@ const assetPath = (project: Project, file: string) =>
     ? file
     : `/projects/${project.folder}/${file}`;
 
-function ProjectLinks({ project, compact = false }: { project: Project; compact?: boolean }) {
+function ProjectLinks({
+  project,
+  compact = false,
+}: {
+  project: Project;
+  compact?: boolean;
+}) {
   const size = compact ? "h-9 px-4 text-[0.8125rem]" : "";
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -90,7 +96,7 @@ function SlideMedia({ slide, eager }: { slide: Slide; eager: boolean }) {
       sizes="(min-width: 1280px) 1120px, (min-width: 768px) 82vw, 92vw"
       priority={eager}
       loading={eager ? undefined : "lazy"}
-      className="object-cover object-top transition-transform duration-700 ease-[var(--ease-out)] group-hover/slide:scale-[1.02]"
+      className="object-cover object-top transition-transform duration-700 ease-out group-hover/slide:scale-[1.02]"
       draggable={false}
     />
   );
@@ -103,7 +109,9 @@ function CaseStudy({ project, index }: { project: Project; index: number }) {
     { label: "Contribution", body: study?.contribution },
     { label: "Approach", body: study?.approach },
     { label: "Outcome", body: study?.outcome },
-  ].filter((block): block is { label: string; body: string } => Boolean(block.body));
+  ].filter((block): block is { label: string; body: string } =>
+    Boolean(block.body),
+  );
 
   return (
     <motion.article
@@ -121,7 +129,7 @@ function CaseStudy({ project, index }: { project: Project; index: number }) {
         </p>
         <h3
           id={`case-${project.slug}`}
-          className="mt-4 text-[length:var(--step-3)] font-semibold leading-[1.05]"
+          className="mt-4 text-(length:--step-3) font-semibold leading-[1.05]"
         >
           {project.title}
         </h3>
@@ -148,7 +156,9 @@ function CaseStudy({ project, index }: { project: Project; index: number }) {
                 <span className="text-[length:var(--step-2)] font-semibold leading-none tracking-tight text-primary">
                   {metric.value}
                 </span>
-                <span className="text-xs leading-snug text-muted-foreground">{metric.label}</span>
+                <span className="text-xs leading-snug text-muted-foreground">
+                  {metric.label}
+                </span>
               </li>
             ))}
           </ul>
@@ -172,7 +182,9 @@ function CaseStudy({ project, index }: { project: Project; index: number }) {
           {blocks.map((block, blockIndex) => (
             <section key={block.label} className="bg-background p-6">
               <h4 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-primary">
-                <span className="text-muted-foreground">{pad(blockIndex + 1)}</span>
+                <span className="text-muted-foreground">
+                  {pad(blockIndex + 1)}
+                </span>
                 {block.label}
               </h4>
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
@@ -209,7 +221,12 @@ export function Projects() {
   const slides = useMemo<Slide[]>(
     () =>
       featuredProjects.flatMap((project, projectIndex) =>
-        project.images.map((src, frame) => ({ project, projectIndex, src, frame })),
+        project.images.map((src, frame) => ({
+          project,
+          projectIndex,
+          src,
+          frame,
+        })),
       ),
     [],
   );
@@ -248,7 +265,11 @@ export function Projects() {
     if (!node || !api) return;
     const onWheel = (event: WheelEvent) => {
       const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
-      const delta = horizontal ? event.deltaX : event.shiftKey ? event.deltaY : 0;
+      const delta = horizontal
+        ? event.deltaX
+        : event.shiftKey
+          ? event.deltaY
+          : 0;
       if (Math.abs(delta) < 12) return;
       event.preventDefault();
       const now = performance.now();
@@ -283,7 +304,11 @@ export function Projects() {
   const activeProject = current.project;
 
   return (
-    <section id="work" className="section relative overflow-hidden" aria-labelledby="work-title">
+    <section
+      id="work"
+      className="section relative overflow-hidden"
+      aria-labelledby="work-title"
+    >
       <div className="shell">
         <header className="grid items-end gap-8 md:grid-cols-2">
           <div>
@@ -293,8 +318,8 @@ export function Projects() {
             </h2>
           </div>
           <p className="lede max-w-[44ch] md:justify-self-end md:text-right">
-            A curated set of shipped products. Drag, swipe, scroll sideways, or use your
-            arrow keys to explore each build.
+            A curated set of shipped products. Drag, swipe, scroll sideways, or
+            use your arrow keys to explore each build.
           </p>
         </header>
       </div>
@@ -308,7 +333,10 @@ export function Projects() {
         onKeyDown={onKeyDown}
         className="group/carousel mt-16 rounded-3xl focus-visible:outline-offset-8"
       >
-        <div ref={viewportRef} className="cursor-grab overflow-hidden active:cursor-grabbing">
+        <div
+          ref={viewportRef}
+          className="cursor-grab overflow-hidden active:cursor-grabbing"
+        >
           <ul className="flex touch-pan-y">
             {slides.map((slide, index) => {
               const isActive = index === selected;
@@ -324,14 +352,17 @@ export function Projects() {
                   <div className="@container">
                     <div
                       className={`group/slide relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-secondary shadow-2xl shadow-black/25 transition-[opacity,transform,filter] duration-500 ease-[var(--ease-out)] @3xl:aspect-video ${
-                        isActive ? "opacity-100" : "scale-[0.94] opacity-40 saturate-50"
+                        isActive
+                          ? "opacity-100"
+                          : "scale-[0.94] opacity-40 saturate-50"
                       }`}
                     >
                       <SlideMedia slide={slide} eager={index < 2} />
                       <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-black/90 via-black/45 via-35% to-transparent to-70% opacity-90 transition-opacity duration-500 group-hover/slide:opacity-100 group-focus-within/slide:opacity-100 @3xl:block" />
 
                       <span className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/60 px-3 backdrop-blur py-1 font-mono text-[0.6875rem] tabular-nums text-white/90 @3xl:right-6 @3xl:top-6">
-                        {pad(slide.frame + 1)}/{pad(slide.project.images.length)}
+                        {pad(slide.frame + 1)}/
+                        {pad(slide.project.images.length)}
                       </span>
 
                       <div className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-6 p-8 text-white @3xl:flex">
@@ -346,14 +377,16 @@ export function Projects() {
                             className="mt-3 flex translate-y-2 flex-wrap gap-1.5 opacity-0 transition-all duration-500 ease-[var(--ease-out)] group-hover/slide:translate-y-0 group-hover/slide:opacity-100 group-focus-within/slide:translate-y-0 group-focus-within/slide:opacity-100"
                             aria-label="Technologies"
                           >
-                            {slide.project.technologies.slice(0, 5).map((tech) => (
-                              <li
-                                key={tech}
-                                className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-mono text-[0.6875rem] text-white/90 backdrop-blur"
-                              >
-                                {tech}
-                              </li>
-                            ))}
+                            {slide.project.technologies
+                              .slice(0, 5)
+                              .map((tech) => (
+                                <li
+                                  key={tech}
+                                  className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-mono text-[0.6875rem] text-white/90 backdrop-blur"
+                                >
+                                  {tech}
+                                </li>
+                              ))}
                           </ul>
                         </div>
                         <div className="shrink-0" inert={!isActive}>
@@ -388,9 +421,16 @@ export function Projects() {
 
       <div className="shell mt-10">
         <div className="grid grid-cols-2 items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
-          <div className="flex items-baseline gap-3 font-mono tabular-nums" aria-hidden>
-            <span className="text-2xl font-medium text-foreground">{pad(selected + 1)}</span>
-            <span className="text-sm text-muted-foreground">/ {pad(slides.length)}</span>
+          <div
+            className="flex items-baseline gap-3 font-mono tabular-nums"
+            aria-hidden
+          >
+            <span className="text-2xl font-medium text-foreground">
+              {pad(selected + 1)}
+            </span>
+            <span className="text-sm text-muted-foreground">
+              / {pad(slides.length)}
+            </span>
           </div>
 
           <ol
@@ -405,7 +445,11 @@ export function Projects() {
                   ? 100
                   : 0;
               return (
-                <li key={chapter.project.slug} style={{ flexGrow: chapter.count }} className="basis-0">
+                <li
+                  key={chapter.project.slug}
+                  style={{ flexGrow: chapter.count }}
+                  className="basis-0"
+                >
                   <button
                     type="button"
                     onClick={() => scrollTo(chapter.start)}
@@ -414,7 +458,9 @@ export function Projects() {
                   >
                     <span
                       className={`truncate font-mono text-[0.6875rem] uppercase tracking-[0.12em] transition-colors ${
-                        isCurrent ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                        isCurrent
+                          ? "text-foreground"
+                          : "text-muted-foreground group-hover:text-foreground"
                       }`}
                     >
                       {chapter.project.title.split(" ")[0]}
@@ -432,10 +478,20 @@ export function Projects() {
           </ol>
 
           <div className="flex items-center gap-2 justify-self-end">
-            <button type="button" onClick={scrollPrev} className="icon-btn" aria-label="Previous slide">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              className="icon-btn"
+              aria-label="Previous slide"
+            >
               <ArrowLeft size={18} />
             </button>
-            <button type="button" onClick={scrollNext} className="icon-btn" aria-label="Next slide">
+            <button
+              type="button"
+              onClick={scrollNext}
+              className="icon-btn"
+              aria-label="Next slide"
+            >
               <ArrowRight size={18} />
             </button>
           </div>
