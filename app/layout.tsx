@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
-import { ThemeProvider } from "@/components/theme-provider";
+import ThemeProviderClient from "@/components/theme-provider-client";
 import "./globals.css";
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -39,14 +39,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="bg-background">
       <body className="font-sans antialiased bg-background">
-        <ThemeProvider
+        <ThemeProviderClient
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange={false}
         >
           {children}
-        </ThemeProvider>
+        </ThemeProviderClient>
         {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>

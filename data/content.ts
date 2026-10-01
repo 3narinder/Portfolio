@@ -14,6 +14,15 @@ export interface Project {
   external: string;
   images: string[];
   folder?: string; // Folder name in public/projects/
+  // Optional status and progress to support completed / ongoing projects
+  status?: "completed" | "ongoing" | "planned";
+  progress?: number; // 0-100 for ongoing projects
+  // Optional case study details to show problem / approach / outcome
+  caseStudy?: {
+    problem?: string;
+    approach?: string;
+    outcome?: string;
+  };
 }
 
 export interface Experience {
@@ -186,8 +195,31 @@ export const portfolioContent = {
         "ark-5.png",
         "ark-6.png",
       ],
+      status: "completed",
+      caseStudy: {
+        problem: "The client needed a multi-vendor e-commerce platform with robust admin and inventory management, and fast catalog performance for thousands of SKUs.",
+        approach: "Built on Next.js and MongoDB with paginated product APIs, server-side rendering for key pages, and a lightweight React-based admin dashboard. Implemented Stripe for payments and role-based access control for vendors.",
+        outcome: "Reduced page load times by 35% and enabled seamless vendor onboarding; the platform supported the company's launch with minimal scaling incidents.",
+      },
+    },
+
+    // Example ongoing project — remove or replace with your own project entry
+    {
+      title: "Personal Dashboard (Example)",
+      description:
+        "Building a personal dashboard to track metrics, tasks, and learning progress. Featuring widgets, charts, and integrations.",
+      technologies: ["React", "Next.js", "Tailwind CSS", "Chart.js"],
+      github: "",
+      external: "",
+      folder: "personal-dashboard",
+      images: [
+        "https://via.placeholder.com/1200x675.png?text=Dashboard+Preview",
+      ],
+      status: "ongoing",
+      progress: 45,
     },
   ] as Project[],
+
 
   // ============================================
   // OTHER PROJECTS (OPTIONAL)
