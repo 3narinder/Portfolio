@@ -3,7 +3,6 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
-import { motion } from "framer-motion";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -14,22 +13,19 @@ export function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return (
-      <div className="w-9 h-9 rounded-md border border-border" />
-    );
+    return <div className="size-9 rounded-full border border-border" aria-hidden />;
   }
 
   const isDark = resolvedTheme === "dark";
 
   return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+    <button
+      type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="p-2 rounded-md border border-border hover:bg-secondary transition-colors duration-300"
+      className="grid size-9 place-items-center rounded-full border border-border transition-colors duration-200 hover:border-primary hover:text-primary"
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      {isDark ? <Sun size={20} /> : <Moon size={20} />}
-    </motion.button>
+      {isDark ? <Sun size={16} /> : <Moon size={16} />}
+    </button>
   );
 }

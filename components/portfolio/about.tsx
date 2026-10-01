@@ -1,88 +1,78 @@
-"use client";
-
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { about } from "@/data/content";
-
-const skills = about.skills;
+import { ArrowUpRight, Github } from "lucide-react";
+import { about, personal, social } from "@/data/content";
+import { Reveal } from "@/components/portfolio/reveal";
+import { SectionHeader } from "@/components/portfolio/section-header";
 
 export function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="about" className="py-24 px-6">
-      <div className="max-w-4xl mx-auto" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-        >
-          <h2 className="flex items-center gap-4 text-2xl md:text-3xl font-bold text-foreground mb-8">
-            <span className="text-primary font-mono text-lg md:text-xl">
-              01.
-            </span>
-            About Me
-            <span className="h-px bg-border flex-1 max-w-xs" />
-          </h2>
-        </motion.div>
+    <section id="about" className="section border-t border-hairline" aria-labelledby="about-title">
+      <div className="shell">
+        <SectionHeader
+          id="about-title"
+          index="02"
+          eyebrow="About"
+          title="Craft, end to end."
+          lede="I care about the details users feel but rarely notice — load time, focus states, and copy that gets out of the way."
+        />
 
-        <div className="grid md:grid-cols-3 gap-12">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="md:col-span-2 space-y-4"
-          >
-            <p className="text-muted-foreground leading-relaxed">
+        <div className="mt-16 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <Reveal className="flex flex-col gap-5 text-muted-foreground">
+            <p className="text-[length:var(--step-1)] leading-snug text-foreground">
               {about.description}
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-              {about.journey}
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              {about.fastForward}{" "}
-            </p>
-
-            <div className="pt-4">
-              <p className="text-foreground font-medium mb-4">
-                Here are a few technologies I&apos;ve been working with
-                recently:
-              </p>
-              <ul className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {skills.map((skill, index) => (
-                  <motion.li
-                    key={skill}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.4, delay: 0.4 + index * 0.05 }}
-                    className="flex items-center gap-2 text-muted-foreground text-sm"
-                  >
-                    <span className="text-primary">▹</span>
-                    {skill}
-                  </motion.li>
-                ))}
-              </ul>
+            <p>{about.journey}</p>
+            <p>{about.fastForward}</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary group"
+              >
+                Download résumé
+                <ArrowUpRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                />
+              </a>
+              <a
+                href={social.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost"
+                aria-label={`${personal.name} on GitHub (opens in new tab)`}
+              >
+                <Github size={16} />
+                GitHub
+              </a>
             </div>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="relative group"
-          >
-            <div className="relative w-full aspect-square max-w-70 mx-auto">
-              <div className="absolute inset-0 border-2 border-primary rounded-md translate-x-4 translate-y-4 group-hover:translate-x-2 group-hover:translate-y-2 transition-transform duration-300" />
-              <div className="relative w-full h-full rounded-md overflow-hidden bg-primary/20">
-                <div className="absolute inset-0 bg-primary/30 group-hover:bg-transparent transition-colors duration-300" />
-                <div className="w-full h-full bg-secondary flex items-center justify-center">
-                  <span className="text-6xl font-bold text-primary/50">AC</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          <ul className="grid gap-4" aria-label="Skills">
+            {about.skillGroups.map((group, index) => (
+              <Reveal key={group.title} delay={index * 0.06}>
+                <li className="group @container rounded-2xl border border-border bg-card/40 p-6 transition-colors duration-300 hover:border-primary/40">
+                  <div className="flex flex-col gap-1 @md:flex-row @md:items-baseline @md:justify-between">
+                    <h3 className="text-lg font-semibold">
+                      <span className="mr-3 font-mono text-xs text-primary">0{index + 1}</span>
+                      {group.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">{group.description}</p>
+                  </div>
+                  <ul className="mt-5 flex flex-wrap gap-2">
+                    {group.skills.map((skill) => (
+                      <li
+                        key={skill}
+                        className="chip transition-colors duration-200 group-hover:border-primary/30 hover:!border-primary hover:text-foreground"
+                      >
+                        {skill}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

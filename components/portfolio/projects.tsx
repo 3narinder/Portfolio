@@ -1,342 +1,458 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import { ExternalLink, Github, Folder } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
 import Image from "next/image";
-import { featuredProjects, otherProjects } from "@/data/content";
+import useEmblaCarousel from "embla-carousel-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Github } from "lucide-react";
+import { featuredProjects, type Project } from "@/data/content";
 
-interface ProjectCarouselProps {
-  images: string[];
-  title: string;
-  className?: string;
+interface Slide {
+  project: Project;
+  projectIndex: number;
+  src: string;
+  frame: number;
 }
 
-function ProjectCarousel({ images, title, className }: ProjectCarouselProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [mounted, setMounted] = useState(false);
+const pad = (value: number) => value.toString().padStart(2, "0");
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+const assetPath = (project: Project, file: string) =>
+  file.startsWith("http") || file.startsWith("/")
+    ? file
+    : `/projects/${project.folder}/${file}`;
 
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (images.length <= 1) return;
-
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-    } else if (e.key === "ArrowRight") {
-      e.preventDefault();
-      setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-    }
-  };
-
+function ProjectLinks({ project, compact = false }: { project: Project; compact?: boolean }) {
+  const size = compact ? "h-9 px-4 text-[0.8125rem]" : "";
   return (
-    <div
-      className={`relative rounded-lg overflow-hidden bg-secondary group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background shadow-lg ${className ?? "aspect-video"}`}
-      tabIndex={0}
-      onKeyDown={handleKeyDown}
-      aria-label={`${title} image gallery. Use left and right arrow keys to navigate.`}
-    >
-      <div className="block w-full h-full relative" tabIndex={-1}>
-        {mounted ? (
-          // Use next/image for local images for improved performance; fallback to img for external URLs
-          images[currentIndex].startsWith("http") ? (
-            <img
-              src={images[currentIndex]}
-              alt={`${title} screenshot ${currentIndex + 1}`}
-              className="w-full h-full object-cover transition-opacity duration-500"
-            />
-          ) : (
-            <Image
-              src={images[currentIndex]}
-              alt={`${title} screenshot ${currentIndex + 1}`}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover transition-opacity duration-500"
-            />
-          )
-        ) : (
-          <div className="w-full h-full bg-muted animate-pulse" />
-        )}
-        <div className="absolute inset-0 bg-primary/5 group-hover:bg-transparent transition-colors duration-300 z-10 pointer-events-none" />
-      </div>
-
-      {mounted && images.length > 1 && (
-        <>
-          {/* Navigation arrows */}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-            }}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
-            aria-label="Previous image"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-            }}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm"
-            aria-label="Next image"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          {/* Dots */}
-          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 items-center">
-            {images.map((_, imgIndex) => (
-              <button
-                key={imgIndex}
-                tabIndex={-1}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setCurrentIndex(imgIndex);
-                }}
-                className={`h-2.5 rounded-full transition-all duration-300 ease-in-out backdrop-blur-sm ${
-                  currentIndex === imgIndex ? "bg-primary w-6 shadow-lg" : "bg-white/60 hover:bg-white w-2.5"
-                }`}
-                aria-label={`Go to image ${imgIndex + 1}`}
-              />
-            ))}
-          </div>
-        </>
+    <div className="flex flex-wrap items-center gap-2">
+      {project.external && (
+        <a
+          href={project.external}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`btn btn-primary group ${size}`}
+          aria-label={`Live demo of ${project.title} (opens in new tab)`}
+        >
+          Live demo
+          <ArrowUpRight
+            size={16}
+            className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          />
+        </a>
+      )}
+      {project.github ? (
+        <a
+          href={project.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`btn btn-ghost ${compact ? "glass" : ""} ${size}`}
+          aria-label={`Source code for ${project.title} (opens in new tab)`}
+        >
+          <Github size={16} />
+          Source
+        </a>
+      ) : (
+        <span
+          className={`btn btn-ghost cursor-default opacity-60 ${compact ? "glass" : ""} ${size}`}
+          title="Client work — source is private"
+        >
+          <Github size={16} />
+          Private repo
+        </span>
       )}
     </div>
   );
 }
 
-export function Projects() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [filter, setFilter] = useState<"all" | "completed" | "ongoing" | "planned">("all");
+function SlideMedia({ slide, eager }: { slide: Slide; eager: boolean }) {
+  const reduceMotion = useReducedMotion();
+  const { project } = slide;
+  if (slide.frame === 0 && project.video && !reduceMotion) {
+    return (
+      <video
+        className="absolute inset-0 size-full object-cover object-top"
+        src={assetPath(project, project.video)}
+        poster={assetPath(project, slide.src)}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      />
+    );
+  }
+  return (
+    <Image
+      src={assetPath(project, slide.src)}
+      alt={`${project.title} — screen ${slide.frame + 1} of ${project.images.length}`}
+      fill
+      sizes="(min-width: 1280px) 1120px, (min-width: 768px) 82vw, 92vw"
+      priority={eager}
+      loading={eager ? undefined : "lazy"}
+      className="object-cover object-top transition-transform duration-700 ease-[var(--ease-out)] group-hover/slide:scale-[1.02]"
+      draggable={false}
+    />
+  );
+}
 
-  const filtered = featuredProjects.filter((p) => (filter === "all" ? true : p.status === filter));
+function CaseStudy({ project, index }: { project: Project; index: number }) {
+  const study = project.caseStudy;
+  const blocks = [
+    { label: "Problem", body: study?.problem },
+    { label: "Contribution", body: study?.contribution },
+    { label: "Approach", body: study?.approach },
+    { label: "Outcome", body: study?.outcome },
+  ].filter((block): block is { label: string; body: string } => Boolean(block.body));
 
   return (
-    <section id="projects" className="py-24 px-6">
-      <div className="max-w-5xl mx-auto" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+    <motion.article
+      key={project.slug}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      className="grid gap-12 lg:grid-cols-2 lg:gap-16"
+      aria-labelledby={`case-${project.slug}`}
+    >
+      <div className="flex flex-col">
+        <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          Case study {pad(index + 1)} · {project.category}
+        </p>
+        <h3
+          id={`case-${project.slug}`}
+          className="mt-4 text-[length:var(--step-3)] font-semibold leading-[1.05]"
         >
-          <h2 className="flex items-center gap-4 text-2xl md:text-3xl font-bold text-foreground mb-6">
-            <span className="text-primary font-mono text-lg md:text-xl">03.</span>
-            Some Things I&apos;ve Built
-            <span className="h-px bg-border flex-1 max-w-xs" />
-          </h2>
+          {project.title}
+        </h3>
+        <p className="lede mt-4 max-w-[40ch]">{project.tagline}</p>
 
-          <div className="flex gap-3 mb-8 flex-wrap">
-            {(["all", "completed", "ongoing", "planned"] as const).map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  filter === f ? "bg-primary text-primary-foreground" : "bg-card text-foreground"
-                }`}
-                aria-pressed={filter === f}
-              >
-                {f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)}
-              </button>
-            ))}
+        <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+          <div>
+            <dt className="text-muted-foreground">Role</dt>
+            <dd className="font-medium">{project.role}</dd>
           </div>
-        </motion.div>
+          <div>
+            <dt className="text-muted-foreground">Year</dt>
+            <dd className="font-medium">{project.year}</dd>
+          </div>
+        </dl>
 
-        {/* Featured Projects */}
-        <div className="space-y-16">
-          {filtered.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 50 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 + index * 0.08 }}
-              className={`flex flex-col gap-6 lg:grid lg:grid-cols-2 lg:items-stretch`}
-            >
-              <div className={`lg:w-full ${index % 2 === 1 ? "lg:order-2" : "lg:order-1"} lg:h-[360px]`}>
-                <ProjectCarousel
-                  className="h-full"
-                  images={project.images.map((img) => (img.startsWith("http") ? img : `/projects/${project.folder}/${img}`))}
-                  title={project.title}
-                />
-              </div>
+        {project.metrics && (
+          <ul className="mt-8 grid grid-cols-3 overflow-hidden rounded-2xl border border-border">
+            {project.metrics.map((metric) => (
+              <li
+                key={metric.label}
+                className="flex flex-col gap-1 p-4 [&:not(:last-child)]:border-r [&:not(:last-child)]:border-border"
+              >
+                <span className="text-[length:var(--step-2)] font-semibold leading-none tracking-tight text-primary">
+                  {metric.value}
+                </span>
+                <span className="text-xs leading-snug text-muted-foreground">{metric.label}</span>
+              </li>
+            ))}
+          </ul>
+        )}
 
-              {/* Project Content */}
-              <div className={`lg:w-full ${index % 2 === 1 ? "lg:order-1" : "lg:order-2"} flex flex-col justify-between h-full`}>
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <p className="text-primary font-mono text-sm">Featured Project</p>
+        <ul className="mt-8 flex flex-wrap gap-2" aria-label="Technologies">
+          {project.technologies.map((tech) => (
+            <li key={tech} className="chip">
+              {tech}
+            </li>
+          ))}
+        </ul>
 
-                    {project.status && (
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          project.status === "completed"
-                            ? "bg-green-100 text-green-800"
-                            : project.status === "ongoing"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                        aria-label={`Project status: ${project.status}`}
-                      >
-                        {project.status === "completed"
-                          ? "Completed"
-                          : project.status === "ongoing"
-                          ? `Ongoing (${project.progress ?? 0}%)`
-                          : "Planned"}
-                      </span>
-                    )}
-                  </div>
-                </div>
+        <div className="mt-8">
+          <ProjectLinks project={project} />
+        </div>
+      </div>
 
-                <h3 className="text-2xl font-bold text-foreground mb-4">
-                  {project.external ? (
-                    <a href={project.external} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors duration-300">
-                      {project.title}
-                    </a>
-                  ) : (
-                    project.title
-                  )}
-                </h3>
-
-                <div className="bg-card p-6 rounded-lg shadow-lg border border-border/50 mb-4 hover:shadow-xl transition-shadow duration-300">
-                  <p className="text-muted-foreground leading-relaxed">{project.description}</p>
-
-                  {/* render case study if present */}
-                  {project.caseStudy && (
-                    <div className="mt-4 text-sm text-muted-foreground">
-                      {project.caseStudy.problem && (
-                        <>
-                          <p className="font-semibold text-foreground mb-1">Problem</p>
-                          <p className="mb-2">{project.caseStudy.problem}</p>
-                        </>
-                      )}
-                      {project.caseStudy.approach && (
-                        <>
-                          <p className="font-semibold text-foreground mb-1">Approach</p>
-                          <p className="mb-2">{project.caseStudy.approach}</p>
-                        </>
-                      )}
-                      {project.caseStudy.outcome && (
-                        <>
-                          <p className="font-semibold text-foreground mb-1">Outcome</p>
-                          <p className="mb-2">{project.caseStudy.outcome}</p>
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <ul className="flex flex-wrap gap-2 mb-4">
-                  {project.technologies.map((tech) => (
-                    <li key={tech} className="px-3 py-1 text-xs font-mono text-primary bg-primary/10 rounded-full border border-primary/20">
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
-
-                {project.status === "ongoing" && typeof project.progress === "number" && (
-                  <div className="w-full bg-muted h-2 rounded overflow-hidden mb-4" aria-hidden>
-                    <div className="h-2 bg-primary transition-width duration-500" style={{ width: `${project.progress}%` }} />
-                  </div>
-                )}
-
-                <div className="flex gap-4">
-                  {project.github && (
-                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors duration-300 p-2 hover:bg-primary/10 rounded-lg" aria-label="GitHub">
-                      <Github size={20} />
-                    </a>
-                  )}
-                  {project.external && (
-                    <a href={project.external} target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors duration-300 p-2 hover:bg-primary/10 rounded-lg" aria-label="External link">
-                      <ExternalLink size={20} />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </motion.div>
+      <div className="flex flex-col gap-8">
+        <div className="grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2">
+          {blocks.map((block, blockIndex) => (
+            <section key={block.label} className="bg-background p-6">
+              <h4 className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-primary">
+                <span className="text-muted-foreground">{pad(blockIndex + 1)}</span>
+                {block.label}
+              </h4>
+              <p className="mt-3 text-[0.9375rem] leading-relaxed text-muted-foreground">
+                {block.body}
+              </p>
+            </section>
           ))}
         </div>
-
-        {/* Other Projects */}
-        {/*         
-        {otherProjects.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <h3 className="text-2xl font-bold text-foreground text-center mb-12">
-              Other Noteworthy Projects
-            </h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {otherProjects.map((project, index) => (
-                <motion.div
-                  key={project.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.7 + index * 0.1 }}
-                  whileHover={{ y: -8 }}
-                  className="bg-card p-6 rounded-lg border border-border/50 group hover:shadow-lg transition-shadow duration-300"
+        {study?.architecture && (
+          <div>
+            <h4 className="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              Architecture notes
+            </h4>
+            <ul className="mt-4 flex flex-col">
+              {study.architecture.map((note) => (
+                <li
+                  key={note}
+                  className="flex gap-3 border-t border-hairline py-3 text-[0.9375rem] last:border-b"
                 >
-                  <div className="flex items-center justify-between mb-6">
-                    <Folder
-                      size={40}
-                      className="text-primary"
-                      strokeWidth={1.5}
-                    />
-                    <div className="flex gap-4">
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-primary transition-colors duration-300"
-                        aria-label="GitHub"
-                      >
-                        <Github size={20} />
-                      </a>
-                      <a
-                        href={project.external}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-muted-foreground hover:text-primary transition-colors duration-300"
-                        aria-label="External link"
-                      >
-                        <ExternalLink size={20} />
-                      </a>
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
+                  {note}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </motion.article>
+  );
+}
+
+export function Projects() {
+  const reduceMotion = useReducedMotion();
+  const slides = useMemo<Slide[]>(
+    () =>
+      featuredProjects.flatMap((project, projectIndex) =>
+        project.images.map((src, frame) => ({ project, projectIndex, src, frame })),
+      ),
+    [],
+  );
+  const chapters = useMemo(
+    () =>
+      featuredProjects.map((project, index) => ({
+        project,
+        start: slides.findIndex((slide) => slide.projectIndex === index),
+        count: project.images.length,
+      })),
+    [slides],
+  );
+
+  const [viewportRef, api] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+    skipSnaps: false,
+    duration: reduceMotion ? 12 : 32,
+  });
+  const [selected, setSelected] = useState(0);
+  const wheelLock = useRef(0);
+  const regionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!api) return;
+    const onSelect = () => setSelected(api.selectedScrollSnap());
+    onSelect();
+    api.on("select", onSelect).on("reInit", onSelect);
+    return () => {
+      api.off("select", onSelect).off("reInit", onSelect);
+    };
+  }, [api]);
+
+  useEffect(() => {
+    const node = regionRef.current;
+    if (!node || !api) return;
+    const onWheel = (event: WheelEvent) => {
+      const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+      const delta = horizontal ? event.deltaX : event.shiftKey ? event.deltaY : 0;
+      if (Math.abs(delta) < 12) return;
+      event.preventDefault();
+      const now = performance.now();
+      if (now - wheelLock.current < 420) return;
+      wheelLock.current = now;
+      if (delta > 0) api.scrollNext();
+      else api.scrollPrev();
+    };
+    node.addEventListener("wheel", onWheel, { passive: false });
+    return () => node.removeEventListener("wheel", onWheel);
+  }, [api]);
+
+  const scrollPrev = useCallback(() => api?.scrollPrev(), [api]);
+  const scrollNext = useCallback(() => api?.scrollNext(), [api]);
+  const scrollTo = useCallback((index: number) => api?.scrollTo(index), [api]);
+
+  const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+    const actions: Record<string, () => void> = {
+      ArrowLeft: scrollPrev,
+      ArrowRight: scrollNext,
+      Home: () => scrollTo(0),
+      End: () => scrollTo(slides.length - 1),
+    };
+    const action = actions[event.key];
+    if (action) {
+      event.preventDefault();
+      action();
+    }
+  };
+
+  const current = slides[selected] ?? slides[0];
+  const activeProject = current.project;
+
+  return (
+    <section id="work" className="section relative overflow-hidden" aria-labelledby="work-title">
+      <div className="shell">
+        <header className="grid items-end gap-8 md:grid-cols-2">
+          <div>
+            <p className="eyebrow">01 — Selected work</p>
+            <h2 id="work-title" className="h-section mt-5">
+              Case studies
+            </h2>
+          </div>
+          <p className="lede max-w-[44ch] md:justify-self-end md:text-right">
+            A curated set of shipped products. Drag, swipe, scroll sideways, or use your
+            arrow keys to explore each build.
+          </p>
+        </header>
+      </div>
+
+      <div
+        ref={regionRef}
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Project screenshots"
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+        className="group/carousel mt-16 rounded-3xl focus-visible:outline-offset-8"
+      >
+        <div ref={viewportRef} className="cursor-grab overflow-hidden active:cursor-grabbing">
+          <ul className="flex touch-pan-y">
+            {slides.map((slide, index) => {
+              const isActive = index === selected;
+              return (
+                <li
+                  key={`${slide.project.slug}-${slide.frame}`}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={`${index + 1} of ${slides.length}: ${slide.project.title}`}
+                  aria-hidden={!isActive}
+                  className="min-w-0 shrink-0 grow-0 basis-[92%] px-2 sm:basis-[86%] md:px-3 lg:basis-[min(76%,72rem)]"
+                >
+                  <div className="@container">
+                    <div
+                      className={`group/slide relative aspect-[16/10] overflow-hidden rounded-2xl border border-border bg-secondary shadow-2xl shadow-black/25 transition-[opacity,transform,filter] duration-500 ease-[var(--ease-out)] @3xl:aspect-video ${
+                        isActive ? "opacity-100" : "scale-[0.94] opacity-40 saturate-50"
+                      }`}
+                    >
+                      <SlideMedia slide={slide} eager={index < 2} />
+                      <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-black/90 via-black/45 via-35% to-transparent to-70% opacity-90 transition-opacity duration-500 group-hover/slide:opacity-100 group-focus-within/slide:opacity-100 @3xl:block" />
+
+                      <span className="absolute right-3 top-3 rounded-full border border-white/10 bg-black/60 px-3 backdrop-blur py-1 font-mono text-[0.6875rem] tabular-nums text-white/90 @3xl:right-6 @3xl:top-6">
+                        {pad(slide.frame + 1)}/{pad(slide.project.images.length)}
+                      </span>
+
+                      <div className="absolute inset-x-0 bottom-0 hidden items-end justify-between gap-6 p-8 text-white @3xl:flex">
+                        <div className="min-w-0">
+                          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-white/70">
+                            {slide.project.role} · {slide.project.year}
+                          </p>
+                          <h3 className="mt-2 text-3xl font-semibold leading-tight">
+                            {slide.project.title}
+                          </h3>
+                          <ul
+                            className="mt-3 flex translate-y-2 flex-wrap gap-1.5 opacity-0 transition-all duration-500 ease-[var(--ease-out)] group-hover/slide:translate-y-0 group-hover/slide:opacity-100 group-focus-within/slide:translate-y-0 group-focus-within/slide:opacity-100"
+                            aria-label="Technologies"
+                          >
+                            {slide.project.technologies.slice(0, 5).map((tech) => (
+                              <li
+                                key={tech}
+                                className="rounded-full border border-white/15 bg-white/10 px-2.5 py-1 font-mono text-[0.6875rem] text-white/90 backdrop-blur"
+                              >
+                                {tech}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="shrink-0" inert={!isActive}>
+                          <ProjectLinks project={slide.project} compact />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`mt-4 flex flex-col gap-3 transition-opacity duration-500 @3xl:hidden ${
+                        isActive ? "opacity-100" : "opacity-0"
+                      }`}
+                      inert={!isActive}
+                    >
+                      <div>
+                        <p className="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
+                          {slide.project.role} · {slide.project.year}
+                        </p>
+                        <h3 className="mt-1 text-xl font-semibold leading-tight">
+                          {slide.project.title}
+                        </h3>
+                      </div>
+                      <ProjectLinks project={slide.project} compact />
                     </div>
                   </div>
-                  <h4 className="text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
-                    {project.title}
-                  </h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-                    {project.description}
-                  </p>
-                  <ul className="flex flex-wrap gap-2 mt-auto">
-                    {project.technologies.map((tech) => (
-                      <li
-                        key={tech}
-                        className="text-muted-foreground font-mono text-xs"
-                      >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )} */}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+
+      <div className="shell mt-10">
+        <div className="grid grid-cols-2 items-center gap-6 md:grid-cols-[1fr_auto_1fr]">
+          <div className="flex items-baseline gap-3 font-mono tabular-nums" aria-hidden>
+            <span className="text-2xl font-medium text-foreground">{pad(selected + 1)}</span>
+            <span className="text-sm text-muted-foreground">/ {pad(slides.length)}</span>
+          </div>
+
+          <ol
+            className="order-first col-span-2 flex w-full items-center gap-2 md:order-none md:col-span-1 md:w-[min(32rem,44vw)]"
+            aria-label="Projects"
+          >
+            {chapters.map((chapter) => {
+              const isCurrent = chapter.project.slug === activeProject.slug;
+              const progress = isCurrent
+                ? ((current.frame + 1) / chapter.count) * 100
+                : chapter.start + chapter.count <= selected
+                  ? 100
+                  : 0;
+              return (
+                <li key={chapter.project.slug} style={{ flexGrow: chapter.count }} className="basis-0">
+                  <button
+                    type="button"
+                    onClick={() => scrollTo(chapter.start)}
+                    aria-current={isCurrent ? "true" : undefined}
+                    className="group flex w-full flex-col gap-2 rounded-md py-1 text-left"
+                  >
+                    <span
+                      className={`truncate font-mono text-[0.6875rem] uppercase tracking-[0.12em] transition-colors ${
+                        isCurrent ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                      }`}
+                    >
+                      {chapter.project.title.split(" ")[0]}
+                    </span>
+                    <span className="relative block h-0.5 w-full overflow-hidden rounded-full bg-border">
+                      <span
+                        className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-500 ease-[var(--ease-out)]"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+
+          <div className="flex items-center gap-2 justify-self-end">
+            <button type="button" onClick={scrollPrev} className="icon-btn" aria-label="Previous slide">
+              <ArrowLeft size={18} />
+            </button>
+            <button type="button" onClick={scrollNext} className="icon-btn" aria-label="Next slide">
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+        <p className="sr-only" aria-live="polite">
+          Slide {selected + 1} of {slides.length}: {activeProject.title}
+        </p>
+      </div>
+
+      <div className="shell mt-24">
+        <AnimatePresence mode="wait" initial={false}>
+          <CaseStudy
+            key={activeProject.slug}
+            project={activeProject}
+            index={current.projectIndex}
+          />
+        </AnimatePresence>
       </div>
     </section>
   );

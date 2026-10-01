@@ -1,14 +1,30 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Mail, Send, Loader2, CheckCircle, AlertCircle } from "lucide-react";
-import { personal, contact } from "@/data/content";
+import { useState } from "react";
+import {
+  AlertCircle,
+  ArrowUpRight,
+  CheckCircle,
+  Github,
+  Linkedin,
+  Loader2,
+  Mail,
+  Send,
+} from "lucide-react";
+import { personal, contact, social } from "@/data/content";
+import { Reveal } from "@/components/portfolio/reveal";
+
+const fieldClass =
+  "w-full rounded-xl border border-border bg-background/60 px-4 py-3 text-foreground placeholder:text-muted-foreground/70 transition-[border-color,box-shadow] duration-200 hover:border-foreground/20 focus:border-primary focus:outline-none focus:ring-4 focus:ring-primary/15";
+
+const channels = [
+  { name: "Email", value: contact.email, href: `mailto:${contact.email}`, icon: Mail },
+  { name: "LinkedIn", value: "narinder-kumar", href: social.linkedin, icon: Linkedin },
+  { name: "GitHub", value: "@3narinder", href: social.github, icon: Github },
+];
 
 export function Contact() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -49,149 +65,167 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="px-6">
-      <div className="max-w-2xl mx-auto" ref={ref}>
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
-        >
-          <p className="text-primary font-mono text-sm mb-4">
-            04. What&apos;s Next?
-          </p>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-            Get In Touch
-          </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            I&apos;m currently looking for new opportunities and my inbox is
-            always open. Whether you have a question, a project idea, or just
-            want to say hi, I&apos;ll try my best to get back to you!
-          </p>
-        </motion.div>
+    <section id="contact" className="section border-t border-hairline" aria-labelledby="contact-title">
+      <div className="shell">
+        <Reveal className="relative isolate overflow-hidden rounded-[2rem] border border-border bg-card/50 px-6 py-16 sm:px-10 lg:px-16 lg:py-20">
+          <div
+            className="bg-grid absolute inset-0 -z-10 [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
+            aria-hidden
+          />
+          <div
+            className="absolute -top-40 left-1/2 -z-10 h-80 w-[40rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)]"
+            aria-hidden
+          />
 
-        <motion.form
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          onSubmit={handleSubmit}
-          className="space-y-6"
-        >
-          <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                value={formState.name}
-                onChange={(e) =>
-                  setFormState({ ...formState, name: e.target.value })
-                }
-                required
-                className="w-full px-4 py-3 bg-card border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                placeholder="John Doe"
+          <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+            <p className="eyebrow">05 — Contact</p>
+            <h2 id="contact-title" className="display mt-6">
+              Let&apos;s build something{" "}
+              <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent">
+                worth using.
+              </span>
+            </h2>
+            <p className="lede mt-6 max-w-[52ch]">
+              I&apos;m open to full-time roles and select freelance projects. Whether it&apos;s a
+              product idea, a role, or just a question — my inbox is open and I usually
+              reply within a day.
+            </p>
+            <a href={`mailto:${contact.email}`} className="btn btn-primary group mt-10 h-14 px-8 text-base">
+              <Mail size={18} />
+              {contact.email}
+              <ArrowUpRight
+                size={18}
+                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
               />
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                value={formState.email}
-                onChange={(e) =>
-                  setFormState({ ...formState, email: e.target.value })
-                }
-                required
-                className="w-full px-4 py-3 bg-card border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300"
-                placeholder="john@example.com"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-sm font-medium text-foreground mb-2"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              value={formState.message}
-              onChange={(e) =>
-                setFormState({ ...formState, message: e.target.value })
-              }
-              required
-              rows={6}
-              className="w-full px-4 py-3 bg-card border border-border rounded-md text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300 resize-none"
-              placeholder={`Hi ${personal.name.split(" ")[0]}, I'd love to discuss a project with you...`}
-            />
-          </div>
-
-          {status === "error" && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 text-destructive text-sm"
-            >
-              <AlertCircle size={16} />
-              {errorMessage}
-            </motion.div>
-          )}
-
-          {status === "success" && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 text-primary text-sm"
-            >
-              <CheckCircle size={16} />
-              Message sent successfully! I&apos;ll get back to you soon.
-            </motion.div>
-          )}
-
-          <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
-            <motion.button
-              type="submit"
-              disabled={status === "loading"}
-              whileHover={{ scale: status === "loading" ? 1 : 1.02 }}
-              whileTap={{ scale: status === "loading" ? 1 : 0.98 }}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-md font-medium hover:opacity-90 transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
-            >
-              {status === "loading" ? (
-                <>
-                  <Loader2 size={20} className="animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                <>
-                  <Send size={20} />
-                  Send Message
-                </>
-              )}
-            </motion.button>
-
-            <span className="text-muted-foreground text-sm">or</span>
-
-            <a
-              href={`mailto:${contact.email}`}
-              className="inline-flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary rounded-md font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-lg hover:shadow-primary/25 w-full sm:w-auto justify-center"
-            >
-              <Mail size={20} />
-              Email Directly
             </a>
           </div>
-        </motion.form>
+
+          <div className="mt-16 grid gap-10 lg:grid-cols-2 lg:gap-16">
+            <ul className="grid content-start gap-3" aria-label="Contact channels">
+              {channels.map((channel) => (
+                <li key={channel.name}>
+                  <a
+                    href={channel.href}
+                    target={channel.name === "Email" ? undefined : "_blank"}
+                    rel={channel.name === "Email" ? undefined : "noopener noreferrer"}
+                    className="group flex items-center gap-4 rounded-2xl border border-border bg-background/50 p-4 transition-colors duration-300 hover:border-primary/40"
+                  >
+                    <span className="grid size-11 place-items-center rounded-full border border-border text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-primary">
+                      <channel.icon size={18} />
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="text-sm text-muted-foreground">{channel.name}</span>
+                      <span className="truncate font-medium">{channel.value}</span>
+                    </span>
+                    <ArrowUpRight
+                      size={18}
+                      className="text-muted-foreground transition-[transform,color] duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                      aria-hidden
+                    />
+                  </a>
+                </li>
+              ))}
+              <li className="mt-3 rounded-2xl border border-dashed border-border p-5 text-sm leading-relaxed text-muted-foreground">
+                <span className="font-medium text-foreground">A quick note — </span>
+                the best messages tell me what you&apos;re building and where you&apos;re stuck.
+                I&apos;ll reply with honest thoughts either way.
+              </li>
+            </ul>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4" aria-label="Contact form">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="name" className="text-sm font-medium">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    autoComplete="name"
+                    value={formState.name}
+                    onChange={(e) => setFormState({ ...formState, name: e.target.value })}
+                    required
+                    className={fieldClass}
+                    placeholder="Jane Doe"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label htmlFor="email" className="text-sm font-medium">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    autoComplete="email"
+                    value={formState.email}
+                    onChange={(e) => setFormState({ ...formState, email: e.target.value })}
+                    required
+                    className={fieldClass}
+                    placeholder="jane@company.com"
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="message" className="text-sm font-medium">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formState.message}
+                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
+                  required
+                  rows={5}
+                  className={`${fieldClass} resize-none`}
+                  placeholder={`Hi ${personal.name.split(" ")[0]}, I'd love to talk about…`}
+                />
+              </div>
+
+              <div aria-live="polite" className="min-h-5 text-sm">
+                {status === "error" && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-destructive"
+                  >
+                    <AlertCircle size={16} />
+                    {errorMessage}
+                  </motion.p>
+                )}
+                {status === "success" && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 text-primary"
+                  >
+                    <CheckCircle size={16} />
+                    Message sent — I&apos;ll get back to you soon.
+                  </motion.p>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="btn btn-ghost w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:self-start"
+              >
+                {status === "loading" ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Sending…
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    Send message
+                  </>
+                )}
+              </button>
+            </form>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
