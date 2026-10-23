@@ -11,6 +11,11 @@ export interface ProjectMetric {
   label: string;
 }
 
+export interface ProjectImage {
+  src: string;
+  alt: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -22,7 +27,7 @@ export interface Project {
   technologies: string[];
   github: string;
   external: string;
-  images: string[];
+  images: ProjectImage[];
   folder?: string; // Folder name in public/projects/
   video?: string; // Optional short looping preview (mp4/webm) in public/projects/[folder]/
   status?: "completed" | "ongoing" | "planned";
@@ -253,12 +258,30 @@ export const portfolioContent = {
       external: "https://www.arktastic.com/",
       folder: "arktastic",
       images: [
-        "ark-1.webp",
-        "ark-2.webp",
-        "ark-3.webp",
-        "ark-4.webp",
-        "ark-5.webp",
-        "ark-6.webp",
+        {
+          src: "ark-1.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 1 of 6",
+        },
+        {
+          src: "ark-2.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 2 of 6",
+        },
+        {
+          src: "ark-3.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 3 of 6",
+        },
+        {
+          src: "ark-4.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 4 of 6",
+        },
+        {
+          src: "ark-5.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 5 of 6",
+        },
+        {
+          src: "ark-6.webp",
+          alt: "Arktastic E-commerce Platform screenshot, screen 6 of 6",
+        },
       ],
       status: "completed",
       metrics: [
@@ -305,7 +328,24 @@ export const portfolioContent = {
       github: "https://github.com/3narinder/lead-flow",
       external: "https://lead-flow-sandy-eight.vercel.app/",
       folder: "lead-flow",
-      images: ["lead-1.webp", "lead-2.webp", "lead-3.webp", "lead-4.webp"],
+      images: [
+        {
+          src: "lead-1.webp",
+          alt: "LeadFlow screenshot, screen 1 of 4",
+        },
+        {
+          src: "lead-2.webp",
+          alt: "LeadFlow screenshot, screen 2 of 4",
+        },
+        {
+          src: "lead-3.webp",
+          alt: "LeadFlow screenshot, screen 3 of 4",
+        },
+        {
+          src: "lead-4.webp",
+          alt: "LeadFlow screenshot, screen 4 of 4",
+        },
+      ],
       status: "completed",
       metrics: [
         { value: "4", label: "validated REST endpoints" },

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -47,9 +48,11 @@ function useActiveSection(ids: string[]) {
 const sectionIds = navLinks.map((link) => link.href.slice(1));
 
 export function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const active = useActiveSection(sectionIds);
+  const homeHref = (href: string) => (pathname === "/" ? href : `/${href}`);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -85,7 +88,7 @@ export function Navbar() {
           className="shell grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-18"
         >
           <a
-            href="#top"
+            href={homeHref("#top")}
             className="group inline-flex items-center gap-3 justify-self-start"
             aria-label={`${personal.name} — back to top`}
           >
@@ -103,7 +106,7 @@ export function Navbar() {
               return (
                 <li key={link.href} className="relative">
                   <a
-                    href={link.href}
+                    href={homeHref(link.href)}
                     aria-current={isActive ? "true" : undefined}
                     className={`relative z-10 block rounded-full px-4 py-2 text-sm transition-colors duration-200 ${
                       isActive
@@ -163,7 +166,7 @@ export function Navbar() {
               {navLinks.map((link, index) => (
                 <li key={link.href}>
                   <a
-                    href={link.href}
+                    href={homeHref(link.href)}
                     onClick={() => setOpen(false)}
                     aria-current={active === link.href.slice(1) ? "true" : undefined}
                     className="flex items-baseline gap-4 border-b border-hairline py-4 text-2xl font-medium tracking-tight aria-[current]:text-primary"
