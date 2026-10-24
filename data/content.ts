@@ -16,6 +16,16 @@ export interface ProjectImage {
   alt: string;
 }
 
+export interface MinorProject {
+  title: string;
+  description: string;
+  highlights: string[];
+  technologies: string[];
+  images: ProjectImage[];
+  github: string;
+  external: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -371,11 +381,30 @@ export const portfolioContent = {
   ] as Project[],
 
   // ============================================
-  // OTHER PROJECTS (OPTIONAL)
+  // MINOR PROJECTS
+  // Add compact UI projects here; use image paths such as "/projects/project-name/preview.webp".
+  // Each entry takes: title, description, highlights, technologies, images, github, and external.
   // ============================================
-  // Uncomment and add projects to show smaller projects
-  // ============================================
-  otherProjects: [] as Project[],
+  otherProjects: [
+    {
+      title: "Common Grounds Coffee Co.",
+      description:
+        "A welcoming café website for a Midtown Manhattan coffee shop, featuring its menu, daily specials, and neighborhood details.",
+      highlights: [
+        "Highlights coffee, breakfast, and seasonal menu specials",
+        "Includes customer testimonials and clear location and hours",
+      ],
+      technologies: ["Framer", "Responsive Design", "UI Design"],
+      images: [
+        {
+          src: "/projects/common-grounds/site-preview.png",
+          alt: "Screenshot of the Common Grounds Coffee Co. homepage",
+        },
+      ],
+      github: "",
+      external: "https://common-grounds.framer.website/",
+    },
+  ] as MinorProject[],
 
   // ============================================
   // OPEN SOURCE & NOTES
@@ -403,16 +432,6 @@ export const portfolioContent = {
       tags: ["Expo", "React Native", "TypeScript"],
     },
   ] as OpenSourceItem[],
-  // Example projects (uncomment to use):
-  // {
-  //   title: "Weather App",
-  //   description:
-  //     "A weather application with location-based forecasts, 7-day predictions, and interactive maps.",
-  //   technologies: ["React", "OpenWeather API", "Mapbox"],
-  //   github: "https://github.com",
-  //   external: "https://example.com",
-  // },
-
   // ============================================
   // CONTACT SECTION
   // ============================================

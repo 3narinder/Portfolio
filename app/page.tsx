@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/portfolio/navbar";
 import { Hero } from "@/components/portfolio/hero";
 import { Projects } from "@/components/portfolio/projects";
+import { MinorProjects } from "@/components/portfolio/minor-projects";
 import { About } from "@/components/portfolio/about";
 import { Experience } from "@/components/portfolio/experience";
 import { OpenSource } from "@/components/portfolio/open-source";
@@ -14,6 +15,7 @@ export default function Home() {
       <main id="main" className="min-h-screen bg-background">
         <Hero />
         <Projects />
+        <MinorProjects />
         <About />
         <Experience />
         {/* <OpenSource /> */}

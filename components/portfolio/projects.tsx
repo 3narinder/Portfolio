@@ -27,13 +27,7 @@ const assetPath = (project: Project, file: string) =>
     ? file
     : `/projects/${project.folder}/${file}`;
 
-function SlideMedia({
-  slide,
-  eager,
-}: {
-  slide: Slide;
-  eager: boolean;
-}) {
+function SlideMedia({ slide, eager }: { slide: Slide; eager: boolean }) {
   const reduceMotion = useReducedMotion();
   const { project } = slide;
   if (slide.frame === 0 && project.video && !reduceMotion) {
@@ -64,7 +58,13 @@ function SlideMedia({
   );
 }
 
-function ProjectDetails({ project, index }: { project: Project; index: number }) {
+function ProjectDetails({
+  project,
+  index,
+}: {
+  project: Project;
+  index: number;
+}) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -103,7 +103,10 @@ function ProjectDetails({ project, index }: { project: Project; index: number })
         </div>
       </dl>
 
-      <ul className="mt-5 flex flex-wrap gap-2" aria-label="Featured technologies">
+      <ul
+        className="mt-5 flex flex-wrap gap-2"
+        aria-label="Featured technologies"
+      >
         {project.technologies.slice(0, 5).map((tech) => (
           <li key={tech} className="chip">
             {tech}
@@ -237,10 +240,7 @@ function ProjectSlider({
                         : "scale-[0.94] opacity-40 saturate-50"
                     }`}
                   >
-                    <SlideMedia
-                      slide={slide}
-                      eager={eager && index === 0}
-                    />
+                    <SlideMedia slide={slide} eager={eager && index === 0} />
                     <div className="pointer-events-none absolute inset-0 hidden bg-gradient-to-t from-black/90 via-black/45 via-35% to-transparent to-70% opacity-90 transition-opacity duration-500 group-hover/slide:opacity-100 group-focus-within/slide:opacity-100 @3xl:block" />
                     <span
                       aria-hidden="true"
