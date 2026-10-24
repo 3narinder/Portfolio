@@ -25,7 +25,7 @@ export function MinorProjects() {
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
           {otherProjects.map((project, index) => (
             <Reveal key={project.title} delay={index % 2 === 1 ? 0.1 : 0}>
-              <article className="group flex aspect-square flex-col overflow-hidden rounded-3xl border border-hairline bg-surface">
+              <article className="group relative flex aspect-square flex-col overflow-hidden rounded-3xl border border-hairline bg-surface">
                 {project.images[0] && (
                   <div className="relative min-h-0 flex-1 overflow-hidden bg-secondary">
                     <Image
@@ -35,6 +35,21 @@ export function MinorProjects() {
                       sizes="(min-width: 1024px) 28vw, (min-width: 640px) 45vw, 92vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/85 to-transparent p-4 pt-12 text-white opacity-100 transition-opacity duration-300 sm:p-5 sm:pt-14 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                      <p className="text-sm leading-relaxed text-white/90">
+                        {project.description}
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {project.technologies.map((technology) => (
+                          <span
+                            key={technology}
+                            className="rounded-full border border-white/25 bg-black/20 px-2.5 py-1 text-[10px] font-medium leading-tight text-white/90"
+                          >
+                            {technology}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -49,29 +64,35 @@ export function MinorProjects() {
                   </div>
 
                   {project.external && (
-                    <a
-                      href={project.external}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-primary h-10 shrink-0 px-4 text-sm"
-                      aria-label={`Visit ${project.title} (opens in new tab)`}
-                    >
+                    <span className="btn btn-primary h-10 shrink-0 px-4 text-sm">
                       Visit
                       <ArrowUpRight size={16} />
-                    </a>
+                    </span>
                   )}
                   {project.github && (
                     <a
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="icon-btn size-10 shrink-0"
+                      className="icon-btn relative z-20 size-10 shrink-0"
                       aria-label={`View ${project.title} source code (opens in new tab)`}
                     >
                       <Github size={16} />
                     </a>
                   )}
                 </div>
+
+                {project.external && (
+                  <a
+                    href={project.external}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute inset-0 z-10 rounded-3xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    aria-label={`Visit ${project.title} (opens in new tab)`}
+                  >
+                    <span className="sr-only">Visit project website</span>
+                  </a>
+                )}
               </article>
             </Reveal>
           ))}
