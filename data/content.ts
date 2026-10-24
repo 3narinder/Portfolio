@@ -387,22 +387,29 @@ export const portfolioContent = {
   // ============================================
   otherProjects: [
     {
-      title: "Common Grounds Coffee Co.",
+      title: "Ember & Oke Coffee Co.",
       description:
         "A welcoming café website for a Midtown Manhattan coffee shop, featuring its menu, daily specials, and neighborhood details.",
       highlights: [
         "Highlights coffee, breakfast, and seasonal menu specials",
         "Includes customer testimonials and clear location and hours",
       ],
-      technologies: ["Framer", "Responsive Design", "UI Design"],
+      technologies: [
+        "Framer",
+        "Responsive Design",
+        "UI Design",
+        "NEXT.JS",
+        "TYPESCRIPT",
+        "TAILWIND",
+      ],
       images: [
         {
-          src: "/projects/common-grounds/site-preview.png",
-          alt: "Screenshot of the Common Grounds Coffee Co. homepage",
+          src: "/projects/ember&oke/site-preview.png",
+          alt: "Screenshot of the Ember & Oke Coffee Co. homepage",
         },
       ],
       github: "",
-      external: "https://common-grounds.framer.website/",
+      external: "https://coffee-shop-two-rho.vercel.app/",
     },
   ] as MinorProject[],
 
