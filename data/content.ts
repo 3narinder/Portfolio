@@ -155,9 +155,9 @@ export const portfolioContent = {
     ] as SkillGroup[],
   },
 
-  // ============================================
+  //* ============================================
   // WORK EXPERIENCE
-  // ============================================
+  //* ============================================
   experiences: [
     {
       company: "Creative I Technology",
@@ -236,9 +236,9 @@ export const portfolioContent = {
     },
   ] as Experience[],
 
-  // ============================================
+  //* ============================================
   // FEATURED PROJECTS
-  // ============================================
+  //* ============================================
   // To add a new project:
   // 1. Create a folder in public/projects/[project-name]/
   // 2. Add your images to that folder
@@ -380,11 +380,11 @@ export const portfolioContent = {
     },
   ] as Project[],
 
-  // ============================================
+  //* ============================================
   // MINOR PROJECTS
   // Add compact UI projects here; use image paths such as "/projects/project-name/preview.webp".
   // Each entry takes: title, description, highlights, technologies, images, github, and external.
-  // ============================================
+  //* ============================================
   otherProjects: [
     {
       title: "Ember & Oke Coffee Co.",
@@ -409,39 +409,39 @@ export const portfolioContent = {
         },
       ],
       github: "",
-      external: "https://coffee-shop-two-rho.vercel.app/",
+      external: "https://emberandoak-three.vercel.app/",
     },
   ] as MinorProject[],
 
-  // ============================================
-  // OPEN SOURCE & NOTES
-  // ============================================
-  openSource: [
-    {
-      title: "LeadFlow API Guide",
-      description:
-        "Request/response contracts, validation rules, and architecture notes for the LeadFlow REST API.",
-      href: "https://github.com/3narinder/lead-flow/blob/main/API_Guide.md",
-      tags: ["Docs", "REST", "Express"],
-    },
-    {
-      title: "DSA-js",
-      description:
-        "Data structures and algorithms in JavaScript — fundamentals, complexity, arrays, linked lists, and NeetCode 150 solutions.",
-      href: "https://github.com/3narinder/DSA-js",
-      tags: ["JavaScript", "Algorithms"],
-    },
-    {
-      title: "todo-mobile",
-      description:
-        "A cross-platform task app built with Expo and React Native using file-based routing.",
-      href: "https://github.com/3narinder/todo-mobile",
-      tags: ["Expo", "React Native", "TypeScript"],
-    },
-  ] as OpenSourceItem[],
-  // ============================================
-  // CONTACT SECTION
-  // ============================================
+  //* ============================================
+  //* OPEN SOURCE & NOTES
+  //* ============================================
+  // openSource: [
+  //   {
+  //     title: "LeadFlow API Guide",
+  //     description:
+  //       "Request/response contracts, validation rules, and architecture notes for the LeadFlow REST API.",
+  //     href: "https://github.com/3narinder/lead-flow/blob/main/API_Guide.md",
+  //     tags: ["Docs", "REST", "Express"],
+  //   },
+  //   {
+  //     title: "DSA-js",
+  //     description:
+  //       "Data structures and algorithms in JavaScript — fundamentals, complexity, arrays, linked lists, and NeetCode 150 solutions.",
+  //     href: "https://github.com/3narinder/DSA-js",
+  //     tags: ["JavaScript", "Algorithms"],
+  //   },
+  //   {
+  //     title: "todo-mobile",
+  //     description:
+  //       "A cross-platform task app built with Expo and React Native using file-based routing.",
+  //     href: "https://github.com/3narinder/todo-mobile",
+  //     tags: ["Expo", "React Native", "TypeScript"],
+  //   },
+  // ] as OpenSourceItem[],
+  //* ============================================
+  //* CONTACT SECTION
+  //* ============================================
   contact: {
     email: "narinderd9@gmail.com",
     // This email will receive contact form messages
