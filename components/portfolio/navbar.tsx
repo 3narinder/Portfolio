@@ -11,7 +11,7 @@ const navLinks = [
   { name: "Work", href: "#work" },
   { name: "About", href: "#about" },
   { name: "Experience", href: "#experience" },
-  { name: "Open Source", href: "#open-source" },
+  // { name: "Open Source", href: "#open-source" },
   { name: "Contact", href: "#contact" },
 ];
 
@@ -120,7 +120,11 @@ export function Navbar() {
                     <motion.span
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full bg-secondary"
-                      transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 34,
+                      }}
                     />
                   )}
                 </li>
@@ -168,7 +172,9 @@ export function Navbar() {
                   <a
                     href={homeHref(link.href)}
                     onClick={() => setOpen(false)}
-                    aria-current={active === link.href.slice(1) ? "true" : undefined}
+                    aria-current={
+                      active === link.href.slice(1) ? "true" : undefined
+                    }
                     className="flex items-baseline gap-4 border-b border-hairline py-4 text-2xl font-medium tracking-tight aria-[current]:text-primary"
                   >
                     <span className="font-mono text-xs text-muted-foreground">
