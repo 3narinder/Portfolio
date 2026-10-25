@@ -456,5 +456,4 @@ export const about = portfolioContent.about;
 export const experiences = portfolioContent.experiences;
 export const featuredProjects = portfolioContent.featuredProjects;
 export const otherProjects = portfolioContent.otherProjects;
-export const openSource = portfolioContent.openSource;
 export const contact = portfolioContent.contact;
