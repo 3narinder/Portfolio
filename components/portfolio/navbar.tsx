@@ -8,8 +8,8 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { personal } from "@/data/content";
 
 const navLinks = [
-  { name: "Work", href: "#work" },
   { name: "About", href: "#about" },
+  { name: "Work", href: "#work" },
   { name: "Experience", href: "#experience" },
   // { name: "Open Source", href: "#open-source" },
   { name: "Contact", href: "#contact" },

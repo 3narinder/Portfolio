@@ -9,7 +9,7 @@ export function About() {
       <div className="shell">
         <SectionHeader
           id="about-title"
-          index="02"
+          index="01"
           eyebrow="About"
           title="Craft, end to end."
           lede="I care about the details users feel but rarely notice — load time, focus states, and copy that gets out of the way."

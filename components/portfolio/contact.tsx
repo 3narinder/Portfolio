@@ -10,6 +10,7 @@ import {
   Linkedin,
   Loader2,
   Mail,
+  Phone,
   Send,
 } from "lucide-react";
 import { personal, contact, social } from "@/data/content";
@@ -24,14 +25,29 @@ const channels = [
     value: contact.email,
     href: `mailto:${contact.email}`,
     icon: Mail,
+    external: false,
+  },
+  {
+    name: "Phone",
+    value: contact.phone,
+    href: `tel:${contact.phone}`,
+    icon: Phone,
+    external: false,
   },
   {
     name: "LinkedIn",
     value: "Narinder Kumar",
     href: social.linkedin,
     icon: Linkedin,
+    external: true,
   },
-  { name: "GitHub", value: "@3narinder", href: social.github, icon: Github },
+  {
+    name: "GitHub",
+    value: "@3narinder",
+    href: social.github,
+    icon: Github,
+    external: true,
+  },
 ];
 
 export function Contact() {
@@ -92,7 +108,7 @@ export function Contact() {
           />
 
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
-            <p className="eyebrow">05 — Contact</p>
+            <p className="eyebrow">04 — Contact</p>
             <h2 id="contact-title" className="display mt-6">
               Let&apos;s build something{" "}
               <span className="bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent">
@@ -126,12 +142,8 @@ export function Contact() {
                 <li key={channel.name}>
                   <a
                     href={channel.href}
-                    target={channel.name === "Email" ? undefined : "_blank"}
-                    rel={
-                      channel.name === "Email"
-                        ? undefined
-                        : "noopener noreferrer"
-                    }
+                    target={channel.external ? "_blank" : undefined}
+                    rel={channel.external ? "noopener noreferrer" : undefined}
                     className="group flex items-center gap-4 rounded-2xl border border-border bg-background/50 p-4 transition-colors duration-300 hover:border-primary/40"
                   >
                     <span className="grid size-11 place-items-center rounded-full border border-border text-muted-foreground transition-colors group-hover:border-primary/40 group-hover:text-primary">

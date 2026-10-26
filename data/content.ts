@@ -1,9 +1,10 @@
-// ============================================
-// PORTFOLIO CONTENT FILE
-// ============================================
-// This file contains all the content for your portfolio.
-// Update this file to change the content without touching the code.
-// ============================================
+//* ============================================
+//* PORTFOLIO CONTENT FILE
+//* ============================================
+
+//? This file contains all the content for your portfolio.
+//? Update this file to change the content without touching the code.
+//? ============================================
 
 // Type definitions
 export interface ProjectMetric {
@@ -74,9 +75,7 @@ export interface Experience {
 }
 
 export const portfolioContent = {
-  // ============================================
-  // PERSONAL INFORMATION
-  // ============================================
+  //* PERSONAL INFORMATION
   personal: {
     name: "Narinder Kumar",
     role: "Full-Stack Developer",
@@ -88,18 +87,14 @@ export const portfolioContent = {
       "I'm a full-stack developer specializing in the MERN stack. Currently focused on building accessible, performant web applications that solve real-world problems.",
   },
 
-  // ============================================
-  // SOCIAL LINKS
-  // ============================================
+  //* SOCIAL LINKS
   social: {
     github: "https://github.com/3narinder",
     linkedin: "https://www.linkedin.com/in/narinder-kumar-3216a9153/",
     email: "mailto:narinderd9@gmail.com",
   },
 
-  // ============================================
-  // ABOUT SECTION
-  // ============================================
+  //* ABOUT SECTION
   about: {
     description:
       "Hello! I'm Narinder, a passionate full-stack developer based in San Francisco. I enjoy creating things that live on the internet, whether that be websites, applications, or anything in between.",
@@ -130,34 +125,34 @@ export const portfolioContent = {
           "Next.js",
           "TypeScript",
           "JavaScript",
-          "Redux",
-          "TanStack Query",
+          "Redux Toolkit",
+          "React Query",
           "Tailwind CSS",
+          "HTML5",
+          "CSS3",
         ],
       },
       {
         title: "Backend",
         description: "Typed, validated APIs with clean data models.",
-        skills: [
-          "Node.js",
-          "Express.js",
-          "MongoDB",
-          "Mongoose",
-          "GraphQL",
-          "REST APIs",
-        ],
+        skills: ["Node.js", "Express.js", "MongoDB", "Mongoose", "REST APIs"],
       },
       {
         title: "Quality & Delivery",
         description: "Shipping with confidence, not hope.",
-        skills: ["Vitest", "Supertest", "Git", "Vite", "Vercel", "Render"],
+        skills: [
+          "Git",
+          "Vite",
+          "Vitest",
+          "Vercel",
+          "Render",
+          "Performance Optimization",
+        ],
       },
     ] as SkillGroup[],
   },
 
-  //* ============================================
-  // WORK EXPERIENCE
-  //* ============================================
+  //* WORK EXPERIENCE
   experiences: [
     {
       company: "Creative I Technology",
@@ -236,10 +231,8 @@ export const portfolioContent = {
     },
   ] as Experience[],
 
-  //* ============================================
-  // FEATURED PROJECTS
-  //* ============================================
-  // To add a new project:
+  //* FEATURED PROJECTS
+  //? To add a new project:
   // 1. Create a folder in public/projects/[project-name]/
   // 2. Add your images to that folder
   // 3. Add the project details here
@@ -315,76 +308,11 @@ export const portfolioContent = {
         ],
       },
     },
-    {
-      slug: "lead-flow",
-      title: "LeadFlow",
-      tagline: "A typed, tested lead pipeline for small sales teams.",
-      description:
-        "A full-stack lead management app for tracking prospects through a sales pipeline — create, search, filter, sort, paginate, and update leads in real time.",
-      role: "Full-Stack Developer · Solo",
-      year: "2026",
-      category: "SaaS · Full-stack",
-      technologies: [
-        "React 19",
-        "TypeScript",
-        "TanStack Query",
-        "React Hook Form",
-        "Tailwind CSS",
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "Vitest",
-      ],
-      github: "https://github.com/3narinder/lead-flow",
-      external: "https://lead-flow-sandy-eight.vercel.app/",
-      folder: "lead-flow",
-      images: [
-        {
-          src: "lead-1.webp",
-          alt: "LeadFlow screenshot, screen 1 of 4",
-        },
-        {
-          src: "lead-2.webp",
-          alt: "LeadFlow screenshot, screen 2 of 4",
-        },
-        {
-          src: "lead-3.webp",
-          alt: "LeadFlow screenshot, screen 3 of 4",
-        },
-        {
-          src: "lead-4.webp",
-          alt: "LeadFlow screenshot, screen 4 of 4",
-        },
-      ],
-      status: "completed",
-      metrics: [
-        { value: "4", label: "validated REST endpoints" },
-        { value: "4", label: "pipeline stages" },
-        { value: "0", label: "any types — strict TS" },
-      ],
-      caseStudy: {
-        problem:
-          "Small teams track leads in spreadsheets that break down once a pipeline grows: no validation, no shared status, and no fast way to find a contact.",
-        contribution:
-          "Designed and built the whole product end to end — API, data model, validation, UI, tests, and deployment.",
-        approach:
-          "A layered Express API (routes → validators → controllers → models) with centralized error handling, and a React client split into UI, hooks, and service layers and TanStack Query managing server state.",
-        outcome:
-          "A deployed, documented app with server-side search, status filters, sorting, and pagination, covered by a Vitest + Supertest API suite.",
-        architecture: [
-          "Vercel (client) · Render (API) · MongoDB Atlas",
-          "express-validator on every endpoint, AppError + asyncHandler",
-          "Vitest + Supertest suite covering CRUD and health checks",
-        ],
-      },
-    },
   ] as Project[],
 
-  //* ============================================
-  // MINOR PROJECTS
+  //* MINOR PROJECTS
   // Add compact UI projects here; use image paths such as "/projects/project-name/preview.webp".
   // Each entry takes: title, description, highlights, technologies, images, github, and external.
-  //* ============================================
   otherProjects: [
     {
       title: "Ember & Oke Coffee Co.",
@@ -411,11 +339,48 @@ export const portfolioContent = {
       github: "",
       external: "https://emberandoak-three.vercel.app/",
     },
+    {
+      title: "LeadFlow",
+      description:
+        "A full-stack lead management app for tracking prospects through a sales pipeline — create, search, filter, sort, paginate, and update leads.",
+      highlights: [
+        "Server-side search, status filters, sorting, and pagination",
+        "Validated REST API with a Vitest + Supertest test suite",
+      ],
+      technologies: [
+        "React",
+        "TypeScript",
+        "TanStack Query",
+        "React Hook Form",
+        "Tailwind CSS",
+        "Node.js",
+        "Express",
+        "MongoDB",
+        "Vitest",
+      ],
+      images: [
+        {
+          src: "/projects/lead-flow/lead-1.webp",
+          alt: "LeadFlow dashboard screenshot",
+        },
+        {
+          src: "/projects/lead-flow/lead-2.webp",
+          alt: "LeadFlow leads list screenshot",
+        },
+        {
+          src: "/projects/lead-flow/lead-3.webp",
+          alt: "LeadFlow lead form screenshot",
+        },
+        {
+          src: "/projects/lead-flow/lead-4.webp",
+          alt: "LeadFlow pipeline screenshot",
+        },
+      ],
+      external: "https://lead-flow-sandy-eight.vercel.app/",
+    },
   ] as MinorProject[],
 
-  //* ============================================
   //* OPEN SOURCE & NOTES
-  //* ============================================
   // openSource: [
   //   {
   //     title: "LeadFlow API Guide",
@@ -439,11 +404,10 @@ export const portfolioContent = {
   //     tags: ["Expo", "React Native", "TypeScript"],
   //   },
   // ] as OpenSourceItem[],
-  //* ============================================
   //* CONTACT SECTION
-  //* ============================================
   contact: {
     email: "narinderd9@gmail.com",
+    phone: "+91-7717696933",
     // This email will receive contact form messages
     // Make sure to set CONTACT_EMAIL in your environment variables
   },

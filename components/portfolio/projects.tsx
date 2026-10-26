@@ -298,7 +298,7 @@ export function Projects() {
       <div className="shell">
         <header className="grid items-end gap-8 md:grid-cols-2">
           <div>
-            <p className="eyebrow">01 — Selected work</p>
+            <p className="eyebrow">02 — Selected work</p>
             <h2 id="work-title" className="h-section mt-5">
               Case studies
             </h2>
